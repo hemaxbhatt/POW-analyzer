@@ -5,9 +5,9 @@ and the transcript rubric score into a final decision.
 Decision logic:
   - video_score  = verification.score   (0.0-1.0, from truth-table checking)
   - rubric_score = rubric.score         (0.0-1.0, from LLM transcript scoring)
-  - fused_score  = weighted average (video 60%, rubric 40%)
-  - "pass" if fused_score >= PASS_THRESHOLD (0.75)
-  - "borderline" if fused_score >= BORDERLINE_THRESHOLD (0.5)
+  - fused_score  = weighted average (video 20%, rubric 80%)
+  - "pass" if fused_score >= PASS_THRESHOLD (0.65)
+  - "borderline" if fused_score >= BORDERLINE_THRESHOLD (0.45)
   - "fail" otherwise
   
 Special override rules:

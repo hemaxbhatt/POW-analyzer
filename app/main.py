@@ -39,6 +39,40 @@ app = FastAPI(
 )
 
 
+@app.on_event("startup")
+def cleanup_orphaned_jobs():
+    """
+    On server boot, check for any jobs in data/ that were left in 'processing'
+    state due to an unexpected server restart or termination, and mark them as failed.
+    """
+    import json
+    from datetime import datetime, timezone
+    from pathlib import Path
+    from app.analysis import DATA_DIR, save_result
+    import logging
+
+    data_dir = Path(DATA_DIR)
+    if not data_dir.exists():
+        return
+
+    recovered = 0
+    for res_path in data_dir.glob("*/result.json"):
+        try:
+            with open(res_path, "r", encoding="utf-8") as f:
+                d = json.load(f)
+            if d.get("status") == "processing":
+                d["status"] = "failed"
+                d["stage"] = "error"
+                d["error"] = "Server was restarted while analysis was in progress. Please re-trigger submission."
+                d["completed_at"] = datetime.now(timezone.utc).isoformat()
+                save_result(res_path.parent.name, d)
+                recovered += 1
+        except Exception:
+            continue
+    if recovered:
+        logging.getLogger("uvicorn.error").info("Recovered %d orphaned in-progress submission(s).", recovered)
+
+
 from app.docs_ui import DOCS_HTML
 
 @app.get("/docs", include_in_schema=False)
