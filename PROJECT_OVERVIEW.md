@@ -508,3 +508,77 @@ Transcript (457 chars): *"Over here we have implemented a BCD to 7 segment decod
 ---
 
 *Updated by Antigravity — 2026-10-22 13:05 IST*
+
+
+---
+
+## 2026-10-22 to 2026-10-26 — Session 10: CSV Export, Speed Optimisation & Git v1.0 Checkpoint
+
+### What we did in this session
+
+1. **Instructor CSV Export Endpoint:**
+   - Added `GET /submissions/export/csv` to `app/main.py`.
+   - Scans all `data/*/result.json` files and returns a `text/csv` download with columns: `submission_id, student_id, task_id, status, decision, fused_score, cv_score, rubric_score, anti_fraud_match, anti_fraud_inliers, created_at, rubric_reason`.
+   - Verified: 200 status, correct `Content-Disposition: attachment; filename=submissions_summary.csv` header, 22 data rows returned.
+
+2. **Processing Speed Optimisation (3x speedup):**
+   - Benchmarked frame sampling: 269 frames at 6fps took ~105s; 179 frames at 4fps took **25.17s** on the same video.
+   - Lowered default `sample_fps` from 6.0 → **4.0** in:
+     - `app/state_reader.py` (`read_video` default)
+     - `app/analysis.py` (pipeline call)
+     - `app/main.py` (local test endpoint call)
+     - `app/ingestion.py` (`sample_frames` default)
+   - Verified all 78 unit tests still pass after the change.
+
+3. **Repository Clean-Up & Git Checkpoint (v1.0):**
+   - Moved 18 debug/scratch `.py` files to `scratch/` folder.
+   - Created `.gitignore` covering: venv, `__pycache__`, `data/`, videos, debug images, and OS artefacts.
+   - `git init` → staged 41 source/doc/config files → committed as `feat: Milestone v1 — full automated grading pipeline`.
+   - Tagged as `v1.0`.
+
+### Current state of the project
+
+| Piece | Status |
+|---|---|
+| Git repository | ✅ Initialized, v1.0 tagged |
+| Instructor CSV export | ✅ `GET /submissions/export/csv` working |
+| Frame sampling speed | ✅ 4fps default — ~25s/video (~3x speedup) |
+| All 78 unit tests | ✅ Passing |
+
+---
+
+*Updated by Antigravity — 2026-10-26 07:18 IST*
+
+
+---
+
+## 2026-10-26 — Session 11: Multi-Frame Anti-Fraud Cross-Match & Pytest Configuration
+
+### What we did in this session
+
+1. **Multi-Frame Candidate Anti-Fraud Upgrade:**
+   - Modified `verify_submission_match` in `app/anti_fraud.py`: Replaced single mid-frame sampling with multi-frame evaluation across candidate intervals (25%, 50%, 75%).
+   - Added early-exit optimization (breaks immediately if a frame yields $\ge 80$ inliers).
+   - Prevents transient hand occlusions from triggering false fraud flags.
+   - Tested on real data:
+     - Real match pair: **142 inliers (`is_match=True`)**.
+     - Mismatch pair: **25 inliers (`is_match=False`)**.
+
+2. **Environment & Testing Usability Fixes:**
+   - Added `pytest.ini` with `pythonpath = .` and configured `testpaths`, allowing `pytest` to run directly without requiring manual `$env:PYTHONPATH` configuration.
+   - Added `requests>=2.31.0` to `requirements.txt`.
+   - Verified: **78 passed, 1 skipped** in 1.03s.
+   - Pushed commit `923848c` to GitHub `origin/master`.
+
+### Current state of the project
+
+| Piece | Status |
+|---|---|
+| Anti-fraud cross-match | ✅ Upgraded to multi-frame sampling (immune to hand occlusion) |
+| Pytest configuration | ✅ `pytest.ini` active — tests run anywhere out of the box |
+| Dependency manifest | ✅ `requests` added to `requirements.txt` |
+| GitHub sync | ✅ Up to date at `hemaxbhatt/POW-analyzer` |
+
+---
+
+*Updated by Antigravity — 2026-10-26 07:35 IST*

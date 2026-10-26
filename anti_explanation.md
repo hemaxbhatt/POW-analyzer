@@ -548,3 +548,37 @@ Transcript (457 chars): *"Over here we have implemented a BCD to 7 segment decod
 ---
 
 *Updated by Antigravity — 2026-10-26 07:18 IST*
+
+
+---
+
+## 2026-10-26 — Session 11: Multi-Frame Anti-Fraud Cross-Match & Pytest Configuration
+
+### What we did in this session
+
+1. **Multi-Frame Candidate Anti-Fraud Upgrade:**
+   - Modified `verify_submission_match` in `app/anti_fraud.py`: Replaced single mid-frame sampling with multi-frame evaluation across candidate intervals (25%, 50%, 75%).
+   - Added early-exit optimization (breaks immediately if a frame yields $\ge 80$ inliers).
+   - Prevents transient hand occlusions from triggering false fraud flags.
+   - Tested on real data:
+     - Real match pair: **142 inliers (`is_match=True`)**.
+     - Mismatch pair: **25 inliers (`is_match=False`)**.
+
+2. **Environment & Testing Usability Fixes:**
+   - Added `pytest.ini` with `pythonpath = .` and configured `testpaths`, allowing `pytest` to run directly without requiring manual `$env:PYTHONPATH` configuration.
+   - Added `requests>=2.31.0` to `requirements.txt`.
+   - Verified: **78 passed, 1 skipped** in 1.03s.
+   - Pushed commit `923848c` to GitHub `origin/master`.
+
+### Current state of the project
+
+| Piece | Status |
+|---|---|
+| Anti-fraud cross-match | ✅ Upgraded to multi-frame sampling (immune to hand occlusion) |
+| Pytest configuration | ✅ `pytest.ini` active — tests run anywhere out of the box |
+| Dependency manifest | ✅ `requests` added to `requirements.txt` |
+| GitHub sync | ✅ Up to date at `hemaxbhatt/POW-analyzer` |
+
+---
+
+*Updated by Antigravity — 2026-10-26 07:35 IST*
