@@ -582,3 +582,28 @@ Transcript (457 chars): *"Over here we have implemented a BCD to 7 segment decod
 ---
 
 *Updated by Antigravity — 2026-10-26 07:35 IST*
+
+
+---
+
+## 2026-10-26 — Session 12: Production Job Recovery Hook & Final GitHub Sync
+
+### What we did in this session
+
+1. **Server Restart Job Recovery Hook:**
+   - Implemented an `@app.on_event("startup")` lifecycle hook in `app/main.py`.
+   - On boot, it scans `data/` for any submissions stuck in `"status": "processing"` from a crash or server restart and updates them cleanly to `"failed"` with clear error messaging.
+
+2. **Fusion Documentation Sync:**
+   - Synchronized top docstring in `app/fusion.py` with current tuned weights (20% CV / 80% Rubric, Pass 65%, Borderline 45%).
+
+3. **Production S3 Integration Clarified:**
+   - Documented the end-to-end cloud flow: pre-signed direct upload to S3 bucket `pow-analyzer-895734792457-ap-south-1-an`, background pipeline trigger via `POST /submissions/{id}/analyze`, and automatic result polling.
+
+4. **GitHub Repository Sync:**
+   - Pushed commit `46d7ba7` to `origin/master`.
+   - Repository is 100% clean and up to date.
+
+---
+
+*Updated by Antigravity — 2026-10-26 07:46 IST*
