@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pow_task_schema.json",
+  "title": "Proof-of-Work Task Spec",
+  "description": "Defines the expected input->output behavior of a single digital-electronics task, used by Phase 3 to verify a student's submission video.",
+  "type": "object",
+  "required": [
+    "task_id",
+    "components",
+    "verification_mode",
+    "expected_behavior"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "description": "Unique identifier, e.g. 'task_04_bcd_decoder'."
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "components": {
+      "type": "object",
+      "required": [
+        "inputs",
+        "outputs"
+      ],
+      "properties": {
+        "inputs": {
+          "type": "array",
+          "minItems": 0,
+          "items": {
+            "$ref": "#/$defs/input_component"
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/output_component"
+          }
+        }
+      }
+    },
+    "verification_mode": {
+      "type": "string",
+      "enum": [
+        "state_match",
+        "sequence_match"
+      ],
+      "description": "state_match: order doesn't matter, each listed input state must appear at some point with the correct output. sequence_match: steps must occur in the given order (e.g. counters, step logic driven by the push button)."
+    },
+    "unlisted_input_policy": {
+      "type": "string",
+      "enum": [
+        "ignore",
+        "must_be_absent",
+        "must_match_default"
+      ],
+      "default": "ignore",
+      "description": "What to do if the video shows an input combination NOT in expected_behavior. ignore = don't penalize; must_be_absent = fail if it ever appears; must_match_default = compare its output against `default_output` if provided."
+    },
+    "default_output": {
+      "description": "Only used when unlisted_input_policy = must_match_default. Same shape as one entry's `output` field.",
+      "type": "object"
+    },
+    "expected_behavior": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/state_match_entry"
+          },
+          {
+            "$ref": "#/$defs/sequence_step"
+          }
+        ]
+      }
+    },
+    "timing": {
+      "type": "object",
+      "description": "Global tolerances for reading state off the video.",
+      "properties": {
+        "min_hold_time_ms": {
+          "type": "integer",
+          "default": 500,
+          "description": "Minimum time an input/output state must be stable before it counts as an observed state (filters flicker/bounce/hand-in-frame noise)."
+        },
+        "max_gap_ms": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "default": null,
+          "description": "For sequence_match only: max allowed time between consecutive steps before the sequence is considered broken. null = no limit."
+        }
+      }
+    },
+    "grading": {
+      "type": "object",
+      "properties": {
+        "all_or_nothing": {
+          "type": "boolean",
+          "default": true,
+          "description": "If true, every entry in expected_behavior must be satisfied to pass. If false, use pass_threshold."
+        },
+        "pass_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Required only if all_or_nothing is false. Fraction of expected_behavior entries that must be satisfied."
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Free-form: unit/topic name, points, course reference, etc. Not used by the verification logic itself.",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "input_component": {
+      "type": "object",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Local name used to reference this component in expected_behavior, e.g. 'sw1'."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "dip_switch_4pos",
+            "push_button"
+          ]
+        },
+        "bit_order": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          },
+          "description": "Only for dip_switch_4pos. Maps physical switch position (left to right, 1-4) to bit weight. Default [8,4,2,1] (switch 1 = MSB)."
+        }
+      }
+    },
+    "output_component": {
+      "type": "object",
+      "required": [
+        "id",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "led",
+            "seven_segment_display"
+          ]
+        }
+      }
+    },
+    "input_state": {
+      "type": "object",
+      "description": "Keys are input component ids. dip_switch_4pos value = 4-char binary string e.g. '1010'. push_button value = 'pressed' or 'released', or use event form below for sequence steps.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "output_state": {
+      "type": "object",
+      "description": "Keys are output component ids. led value = 'on'/'off'. seven_segment_display value = single char '0'-'9', 'A'-'F', 'off', or 'invalid'.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "state_match_entry": {
+      "type": "object",
+      "required": [
+        "input",
+        "output"
+      ],
+      "properties": {
+        "input": {
+          "$ref": "#/$defs/input_state"
+        },
+        "output": {
+          "$ref": "#/$defs/output_state"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "sequence_step": {
+      "type": "object",
+      "required": [
+        "step",
+        "trigger",
+        "output"
+      ],
+      "properties": {
+        "step": {
+          "type": "integer",
+          "description": "1-based order in the required sequence."
+        },
+        "trigger": {
+          "type": "object",
+          "description": "What must happen to advance to this step. Either an input_state to reach, or a discrete event.",
+          "properties": {
+            "input_state": {
+              "$ref": "#/$defs/input_state"
+            },
+            "event": {
+              "type": "string",
+              "enum": [
+                "button_press"
+              ],
+              "description": "Use for momentary-button-driven steps (e.g. counter increments on each press) instead of a held input_state."
+            },
+            "component_id": {
+              "type": "string",
+              "description": "Required if event is used - which input component the event applies to."
+            }
+          }
+        },
+        "output": {
+          "$ref": "#/$defs/output_state"
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

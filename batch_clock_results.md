@@ -1,0 +1,11 @@
+# Batch Evaluation Report — Digital Clock Submissions
+*Generated on: 2026-10-21 13:35:55*
+
+| Student / Team | Decision | Fused Score | CV Score | Displays | Rubric Score | Anti-Fraud | Rubric Feedback |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :--- |
+| **TheMultiplexers_25110049_CLOCK** | **PASS** | 80.0% | 0.0% | 2 | 100.0% | Inliers: 8 | The student verbally explained all five required behaviors: seconds counting and rolling over, minutes auto-incrementing, hours and minutes buttons with rollover, and seconds reset. All functional requirements were clearly addressed in the demonstration. |
+| **Gatekeepers_AS_25110019_Clock** | **FAIL** | 32.0% | 0.0% | 1 | 40.0% | Inliers: 26 | The student demonstrated the seconds reset button and mentioned minute auto-increment and manual minute incrementing, but failed to show proper 59-to-00 seconds rollover (stating it resets at 15) and did not demonstrate the hours button incrementing to 12. |
+| **Logic_Mates_25110074_CLOCK** | **PASS** | 76.0% | 0.0% | 0 | 95.0% | Inliers: 27 | The student successfully explained seconds counting, the seconds reset button, auto-increment of minutes at 60 seconds, manual minute incrementing, and the hour increment button with rollover. |
+| **Nanometers_25110162_Clock** | **PASS** | 72.0% | 0.0% | 0 | 90.0% | Inliers: 8 | The student verbally explained and demonstrated seconds counting, minutes auto-increment upon seconds rollover, seconds reset button, hours increment button with rollover, and the manual minute increment button, only briefly omitting explicit rollover demonstration for manual minutes. |
+| **AAJ_Tak_25110140_CLOCK** | **BORDERLINE** | 64.0% | 0.0% | 0 | 80.0% | Inliers: 11 | The student verbally explained seconds auto-counting and rollover, minutes auto-increment, minutes manual increment button, hours manual increment button, and the seconds reset button. However, they did not mention or demonstrate the hours counter resetting after reaching 12. |
+| **threeBits_25110268_CLOCK** | **PASS** | 72.0% | 0.0% | 0 | 90.0% | Inliers: 29 | The student successfully demonstrated and verbally explained seconds counting with rollover, minutes auto-increment, hours button increment and reset, minutes button manual increment, and seconds reset. The only detail lacking clear explanation was the minutes button rollover after 60. |

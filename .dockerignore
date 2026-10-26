@@ -1,0 +1,17 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.git/
+.gitignore
+.env
+data/
+*.mp4
+*.avi
+*.mov
+test_*.py
+test/
+batch_*.py
+scratch/

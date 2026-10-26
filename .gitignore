@@ -1,0 +1,45 @@
+# Git ignore file for Proof-of-Work Analyzer
+# ─── Python ──────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+.pytest_cache/
+
+# ─── Virtual environment ─────────────────────────
+venv/
+
+# ─── Environment / secrets ───────────────────────
+.env
+
+# ─── Runtime job data ────────────────────────────
+data/
+
+# ─── Video files ─────────────────────────────────
+*.mp4
+*.avi
+*.mov
+*.mkv
+
+# ─── Scratch / debug ─────────────────────────────
+scratch/
+
+# ─── Debug image artefacts ───────────────────────
+debug_dip_crops/
+debug_out/
+dip_alloff_crop.jpg
+dip_alloff_white.jpg
+dip_board_result.jpg
+dip_debug*.jpg
+disp_timeline.jpg
+ref_frame.jpg
+roi.jpg
+roi_white.jpg
+slot_*.jpg
+white_mask_debug.jpg
+example_tasks.json
+observations.json
+
+# ─── OS artefacts ────────────────────────────────
+.DS_Store
+Thumbs.db
