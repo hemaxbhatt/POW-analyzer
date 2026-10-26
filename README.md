@@ -26,6 +26,9 @@ Student Video + Board Photo
    result.json  →  Portal (PHP / Next.js)
 ```
 
+> **Core Architectural Principle:**
+> Keep **classical OpenCV** as the primary, fast, in-memory computer vision engine running directly on the server (~25s per video without uploading heavy video frames to cloud APIs). The **audio transcript** (lightweight text payload) carries the LLM rubric evaluation via Gemini/Claude.
+
 ---
 
 ## Validated Results (Oct 2026)

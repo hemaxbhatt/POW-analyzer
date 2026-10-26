@@ -607,3 +607,8 @@ Transcript (457 chars): *"Over here we have implemented a BCD to 7 segment decod
 ---
 
 *Updated by Antigravity — 2026-10-26 07:46 IST*
+
+
+### Core Architectural Principle Locked:
+> **Primary Vision Engine & Evaluation Division:**
+> Keep **classical OpenCV** (SIFT homography + adaptive HSV segmentation) as the primary, fast, in-memory computer vision engine running directly on the backend server ($<25\text{s}$ per video with zero external network payload overhead). Use the **audio transcript** (lightweight text payload) for LLM rubric evaluation via Gemini/Claude. Do not upload large multi-megabyte video frames to external vision APIs.
